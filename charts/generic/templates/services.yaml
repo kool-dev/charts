@@ -1,0 +1,23 @@
+{{- if .Values.services }}
+{{- $fullName := include "generic.fullname" . -}}
+{{- $labels := include "generic.labels" . -}}
+{{- $selectorLabels := include "generic.selectorLabels" . -}}
+{{- range $serviceName, $service := .Values.services }}
+apiVersion: v1
+kind: Service
+metadata:
+  {{- if $service.fullName }}
+  name: {{ $service.fullName }}
+  {{- else }}
+  name: "{{ $fullName }}-{{ $serviceName | default "default" }}"
+  {{- end }}
+  labels: {{ $labels | nindent 4 }}
+spec:
+  type: {{ $service.type }}
+  ports:
+    - port: {{ $service.port }}
+      targetPort: {{ $service.targetPort | default $service.port }}
+  selector: {{ $selectorLabels | nindent 4 }}
+---
+{{- end }}
+{{- end }}

@@ -1,0 +1,34 @@
+generic:
+  nameOverride: redis
+  # strategy:
+  #   type: Recreate
+
+  containers:
+    default:
+      image:
+        repository: redis
+        pullPolicy: Always
+        tag: 5.0-alpine
+      ports:
+        - containerPort: 6379
+      livenessProbe:
+        tcpSocket:
+          port: 6379
+      # volumeMounts:
+      #   - name: default
+      #     mountPath: /var/lib/redis
+      #     subPath: redis
+
+  # storages:
+  #   - accessModes:
+  #       - ReadWriteOnce
+  #     size: 1Gi
+
+  # volumes:
+  #   - persistentVolumeClaim:
+  #       claimName: default
+
+  services:
+    default:
+      type: ClusterIP
+      port: 6379

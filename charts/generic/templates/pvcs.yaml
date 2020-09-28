@@ -1,0 +1,27 @@
+{{- if .Values.storages }}
+{{- $fullName := include "generic.fullname" . -}}
+{{- $labels := include "generic.labels" . -}}
+{{- range $storage := .Values.storages }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  {{- if .fullName }}
+  name: {{ .fullName }}
+  {{- else }}
+  name: "{{ $fullName }}-{{ .name | default "default" }}"
+  {{- end }}
+  labels: {{ $labels | nindent 4 }}
+spec:
+  {{- if .className }}
+  storageClassName: {{ .className }}
+  {{- end }}
+  accessModes:
+  {{- range .accessModes }}
+    - {{ . }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .size }}
+---
+{{- end }}
+{{- end }}

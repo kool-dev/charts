@@ -1,0 +1,108 @@
+mysql:
+  enabled: false
+
+  generic:
+    # strategy:
+    #   type: Recreate
+
+    # containers:
+    #   default:
+    #     args: ["--default-authentication-plugin=mysql_native_password"]
+
+    services:
+      default:
+        fullName: mysql
+
+redis:
+  enabled: false
+
+  generic:
+    # strategy:
+    #   type: Recreate
+
+    services:
+      default:
+        fullName: redis
+
+generic:
+  nameOverride: wordpress
+  # strategy:
+  #   type: Recreate
+  rollme: true
+
+  containers:
+    app:
+      image:
+        repository: wordpress
+        pullPolicy: Always
+        tag: php7.4-fpm-alpine
+      ports:
+        - containerPort: 9000
+      livenessProbe:
+        tcpSocket:
+          port: 9000
+      envFrom:
+        - secretRef:
+            name: env
+      # volumeMounts:
+      #   - name: default
+      #     mountPath: /var/www/html
+      #     subPath: wordpress
+    http:
+      image:
+        repository: kooldev/nginx
+        pullPolicy: Always
+        tag: php
+      ports:
+        - containerPort: 80
+      livenessProbe:
+        tcpSocket:
+          port: 80
+      env:
+        - name: PHP_FPM
+          value: "localhost:9000"
+        - name: ROOT
+          value: "/var/www/html"
+      envFrom:
+        - secretRef:
+            name: env
+      # volumeMounts:
+      #   - name: default
+      #     mountPath: /var/www/html
+      #     subPath: wordpress
+
+  secrets:
+    - name: env
+      data:
+        WORDPRESS_DB_HOST: "mysql"
+        WORDPRESS_DB_NAME: "database"
+        WORDPRESS_DB_USER: "user"
+        WORDPRESS_DB_PASSWORD: "pass"
+
+  # storages:
+  #   - accessModes:
+  #       - ReadWriteOnce
+  #     size: 1Gi
+
+  # volumes:
+  #   - name: default
+  #     persistentVolumeClaim:
+  #       claimName: default
+
+  services:
+    default:
+      type: ClusterIP
+      port: 80
+
+  # ingresses:
+  #   - hosts:
+  #       - host: chart-example.local
+  #         paths:
+  #           - serviceName: default
+  #             servicePort: 80
+  #     # annotations:
+  #     #   kubernetes.io/ingress.class: nginx
+  #     # tls:
+  #     #   - secretName: chart-example-tls
+  #     #     hosts:
+  #     #       - chart-example.local

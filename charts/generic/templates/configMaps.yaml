@@ -1,0 +1,23 @@
+{{- if .Values.configMaps }}
+{{- $fullName := include "generic.fullname" . -}}
+{{- $labels := include "generic.labels" . -}}
+{{- range $configMap := .Values.configMaps }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  {{- if .fullName }}
+  name: {{ .fullName }}
+  {{- else }}
+  name: "{{ $fullName }}-{{ .name | default "default" }}"
+  {{- end }}
+  labels: {{ $labels | nindent 4 }}
+data:
+  {{- range $key, $value := .data }}
+  {{ $key }}: {{ $value }}
+  {{- end }}
+  {{- range $key, $value := .files }}
+  {{ $key }}: | {{ $value | nindent 4 }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

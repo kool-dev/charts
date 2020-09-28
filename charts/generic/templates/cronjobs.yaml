@@ -1,0 +1,114 @@
+{{- if .Values.cronjobs }}
+{{- $fullName := include "generic.fullname" . -}}
+{{- range $cronjobName, $cronjob := .Values.cronjobs }}
+{{- if or (not (hasKey $cronjob "enabled")) ($cronjob.enabled) }}
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  {{- if $cronjob.fullName }}
+  name: {{ $cronjob.fullName }}
+  {{- else }}
+  name: "{{ $fullName }}-{{ $cronjob.name | default $cronjobName }}"
+  {{- end }}
+  labels: {{ include "generic.labels" $ | nindent 4 }}
+spec:
+  {{- with $cronjob.concurrencyPolicy }}
+  concurrencyPolicy: {{ . }}
+  {{- end }}
+  schedule: {{ $cronjob.schedule | quote }}
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ include "generic.serviceAccountName" $ }}
+          {{- with $.Values.securityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $cronjob.restartPolicy }}
+          restartPolicy: {{ . }}
+          {{- end }}
+          containers:
+            - name: {{ $cronjob.name | default $cronjobName }}
+              image: "{{ $cronjob.image.repository }}:{{ $cronjob.image.tag }}"
+              imagePullPolicy: {{ $cronjob.image.pullPolicy | default "Always" }}
+              {{- with $cronjob.command }}
+              command: {{ . | toJson }}
+              {{- end }}
+              {{- with $cronjob.args }}
+              args: {{ . | toJson }}
+              {{- end }}
+              {{- with $cronjob.securityContext }}
+              securityContext: {{ toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $cronjob.env }}
+              env: {{ toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $cronjob.envFrom }}
+              envFrom:
+                {{- range $envFrom := . }}
+                {{- if $envFrom.secretRef }}
+                - secretRef:
+                    {{- if $envFrom.secretRef.fullName }}
+                    name: {{ $envFrom.secretRef.fullName }}
+                    {{- else }}
+                    name: "{{ $fullName }}-{{ $envFrom.secretRef.name }}"
+                    {{- end }}
+                {{- else if $envFrom.configMapRef }}
+                - configMapRef:
+                    {{- if $envFrom.configMapRef.fullName }}
+                    name: {{ $envFrom.configMapRef.fullName }}
+                    {{- else }}
+                    name: "{{ $fullName }}-{{ $envFrom.configMapRef.name }}"
+                    {{- end }}
+                {{- else }}
+                - {{ toYaml . | indent 18 }}
+                {{- end }}
+                {{- end }}
+              {{- end }}
+              {{- with $cronjob.volumeMounts }}
+              volumeMounts: {{ toYaml . | nindent 16 }}
+              {{- end }}
+              {{- with $cronjob.resources }}
+              resources: {{ toYaml . | nindent 16 }}
+              {{- end }}
+          {{- with $.Values.volumes }}
+          volumes:
+            {{- range $volume := . }}
+            - name: {{ .name | default "default" }}
+              {{- if $volume.configMap }}
+              configMap:
+                {{- if $volume.configMap.fullName }}
+                name: {{ $volume.configMap.fullName }}
+                {{- else }}
+                name: "{{ $fullName }}-{{ $volume.configMap.name }}"
+                {{- end }}
+              {{- else if $volume.persistentVolumeClaim }}
+              persistentVolumeClaim:
+                {{- if $volume.persistentVolumeClaim.fullClaimName }}
+                claimName: {{ $volume.persistentVolumeClaim.fullClaimName }}
+                {{- else }}
+                claimName: "{{ $fullName }}-{{ $volume.persistentVolumeClaim.claimName }}"
+                {{- end }}
+              {{- else if $volume.hostPath }}
+              hostPath: {{ toYaml .hostPath | nindent 16 }}
+              {{- else }}
+{{ toYaml . | indent 14 }}
+              {{- end }}
+            {{- end }}
+          {{- end }}
+          {{- with $.Values.nodeSelector }}
+          nodeSelector: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.affinity }}
+          affinity: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.tolerations }}
+          tolerations: {{ toYaml . | nindent 12 }}
+          {{- end }}
+---
+{{- end }}
+{{- end }}
+{{- end }}

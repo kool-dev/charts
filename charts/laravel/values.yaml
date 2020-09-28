@@ -1,0 +1,165 @@
+mysql:
+  enabled: false
+  generic:
+    # strategy:
+    #   type: Recreate
+    serviceAccount:
+      create: false
+    # containers:
+    #   default:
+    #     args: ["--default-authentication-plugin=mysql_native_password"]
+
+redis:
+  enabled: false
+  generic:
+    # strategy:
+    #   type: Recreate
+    serviceAccount:
+      create: false
+
+generic:
+  nameOverride: laravel
+  # strategy:
+  #   type: Recreate
+  rollme: true
+
+  serviceAccount:
+    create: false
+
+  initContainers:
+    1-storage:
+      enabled: false
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      command: ["/bin/sh", "-c", "cp -r /app/storage/* /tmp/storage/ && chown -R fwd. /tmp/storage"]
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /tmp/storage
+      #     subPath: storage
+    5-migrate:
+      enabled: false
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      args: ["php", "artisan", "migrate", "--force", "--step"]
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /app/storage
+      #     subPath: storage
+
+  containers:
+    app:
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      ports:
+        - containerPort: 9000
+      livenessProbe:
+        tcpSocket:
+          port: 9000
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /app/storage
+      #     subPath: storage
+    http:
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      ports:
+        - containerPort: 80
+      livenessProbe:
+        tcpSocket:
+          port: 80
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /app/storage
+      #     subPath: storage
+    worker:
+      enabled: false
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      args: ["php", "artisan", "queue:work"]
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /app/storage
+      #     subPath: storage
+
+  cronjobs:
+    schedule:
+      enabled: false
+      concurrencyPolicy: Allow
+      schedule: "* * * * *"
+      restartPolicy: Never
+      image:
+        repository:
+        pullPolicy: Always
+        tag:
+      args: ["php", "artisan", "schedule:run"]
+      # envFrom:
+      #   - secretRef:
+      #       name: env
+      # volumeMounts:
+      #   - name: storage
+      #     mountPath: /app/storage
+      #     subPath: storage
+
+  # secrets:
+  #   - name: env
+  #     data:
+  #       LOG_CHANNEL: "stderr"
+  #       APP_NAME: "Example"
+  #       # APP_ENV: "development"
+  #       # APP_KEY: ""
+  #       # APP_DEBUG: "true"
+  #       # APP_URL: "https://url"
+
+  # storages:
+  #   - name: storage
+  #     accessModes:
+  #       - ReadWriteOnce
+  #     size: 1Gi
+
+  # volumes:
+  #   - name: storage
+  #     persistentVolumeClaim:
+  #       claimName: storage
+
+  services:
+    default:
+      type: ClusterIP
+      port: 80
+
+  # ingresses:
+  #   - hosts:
+  #       - host: chart-example.local
+  #         paths:
+  #           - serviceName: default
+  #             servicePort: 80
+  #     # annotations:
+  #     #   kubernetes.io/ingress.class: nginx
+  #     # tls:
+  #     #   - secretName: chart-example-tls
+  #     #     hosts:
+  #     #       - chart-example.local

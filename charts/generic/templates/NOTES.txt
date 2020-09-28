@@ -1,0 +1,20 @@
+{{- if .Values.ingresses }}
+  Ingresses:
+  {{- range $ingress := .Values.ingresses }}
+    {{- range $host := .hosts }}
+      {{- range .paths }}
+      http{{ if $ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- else if .Values.services }}
+  Services:
+  {{- $fullName := include "generic.fullname" . -}}
+  {{- range $service := .Values.services }}
+    {{- if .fullName }}
+    {{ .fullName }}
+    {{- else }}
+    {{ $fullName }}-{{ .name | default "default" }}:{{ .port }}
+    {{- end }}
+  {{- end }}
+{{- end }}

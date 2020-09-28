@@ -1,0 +1,16 @@
+apiVersion: v2
+name: wordpress
+description: Wordpress Helm Chart
+version: 1.0.0
+dependencies:
+- name: generic
+  version: 1.0.0
+  repository: https://kool-dev.github.io/charts
+- name: mysql
+  condition: mysql.enabled
+  version: 1.0.0
+  repository: https://kool-dev.github.io/charts
+- name: redis
+  condition: redis.enabled
+  version: 1.0.0
+  repository: https://kool-dev.github.io/charts
