@@ -1,6 +1,6 @@
 apiVersion: v2
 name: redis
-description: Redis Helm Chart
+description: Redis helm chart
 version: 1.0.0
 dependencies:
 - name: generic

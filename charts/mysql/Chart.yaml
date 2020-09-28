@@ -1,6 +1,6 @@
 apiVersion: v2
 name: mysql
-description: MySQL Helm Chart
+description: MySQL helm chart
 version: 1.0.0
 dependencies:
 - name: generic
