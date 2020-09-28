@@ -9,6 +9,27 @@ entries:
     urls:
     - https://github.com/kool-dev/charts/releases/download/generic-1.0.0/generic-1.0.0.tgz
     version: 1.0.0
+  laravel:
+  - apiVersion: v2
+    created: "2020-09-28T18:16:34.83170755Z"
+    dependencies:
+    - name: generic
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    description: Laravel helm chart
+    digest: 39339c47189b1a71e5f0b88e1fe51b6825404d3b83d13990e87200f671682b61
+    name: laravel
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/laravel-1.0.0/laravel-1.0.0.tgz
+    version: 1.0.0
   mysql:
   - apiVersion: v2
     created: "2020-09-28T18:15:30.279101658Z"
@@ -34,5 +55,26 @@ entries:
     name: redis
     urls:
     - https://github.com/kool-dev/charts/releases/download/redis-1.0.0/redis-1.0.0.tgz
+    version: 1.0.0
+  wordpress:
+  - apiVersion: v2
+    created: "2020-09-28T18:16:35.054651064Z"
+    dependencies:
+    - name: generic
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    - condition: redis.enabled
+      name: redis
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    description: Wordpress helm chart
+    digest: 6d02a0de5d6c23572fbd8715dc26fb63c028aeca69f65cdde9fa6df61d39864d
+    name: wordpress
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/wordpress-1.0.0/wordpress-1.0.0.tgz
     version: 1.0.0
 generated: "2020-09-28T18:13:18.39764489Z"
