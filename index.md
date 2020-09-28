@@ -3,7 +3,7 @@
 Add repository:
 
 ```bash
-helm repo add kooldev https://kool-dev.github.io/charts
+helm repo add kooldev https://charts.kool.dev
 ```
 
 Deploy:
