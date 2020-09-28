@@ -9,4 +9,30 @@ entries:
     urls:
     - https://github.com/kool-dev/charts/releases/download/generic-1.0.0/generic-1.0.0.tgz
     version: 1.0.0
+  mysql:
+  - apiVersion: v2
+    created: "2020-09-28T18:15:30.279101658Z"
+    dependencies:
+    - name: generic
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    description: MySQL helm chart
+    digest: 83a0ac2ec4ea8952a203a1a6005dfb0053dbcf5c657a44a2e11fa8044e927c27
+    name: mysql
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/mysql-1.0.0/mysql-1.0.0.tgz
+    version: 1.0.0
+  redis:
+  - apiVersion: v2
+    created: "2020-09-28T18:15:30.372020473Z"
+    dependencies:
+    - name: generic
+      repository: https://kool-dev.github.io/charts
+      version: 1.0.0
+    description: Redis helm chart
+    digest: a850c28b8884cf4e47ebb35d18b0eaf18b7258b75edb4e857da45a5a969f1fd0
+    name: redis
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/redis-1.0.0/redis-1.0.0.tgz
+    version: 1.0.0
 generated: "2020-09-28T18:13:18.39764489Z"
