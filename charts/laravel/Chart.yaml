@@ -1,6 +1,6 @@
 apiVersion: v2
 name: laravel
-description: Laravel Helm Chart
+description: Laravel helm chart
 version: 1.0.0
 dependencies:
 - name: generic

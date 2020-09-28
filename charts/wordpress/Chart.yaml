@@ -1,6 +1,6 @@
 apiVersion: v2
 name: wordpress
-description: Wordpress Helm Chart
+description: Wordpress helm chart
 version: 1.0.0
 dependencies:
 - name: generic
