@@ -1,0 +1,43 @@
+
+generic:
+  nameOverride: sshd
+
+  containers:
+    app:
+      image:
+        repository: kooldev/sshd
+        pullPolicy: Always
+        tag: latest
+      ports:
+        - containerPort: 22
+      livenessProbe:
+        tcpSocket:
+          port: 22
+      envFrom:
+        - secretRef:
+            name: env
+
+  secrets:
+    - name: env
+      data:
+        AUTHORIZED_KEYS: |
+          ssh-rsa ...
+          ssh-rsa ...
+
+  services:
+    default:
+      type: ClusterIP
+      port: 22
+
+  # ingresses:
+  #   - hosts:
+  #       - host: chart-example.local
+  #         paths:
+  #           - serviceName: default
+  #             servicePort: 80
+  #     # annotations:
+  #     #   kubernetes.io/ingress.class: nginx
+  #     # tls:
+  #     #   - secretName: chart-example-tls
+  #     #     hosts:
+  #     #       - chart-example.local

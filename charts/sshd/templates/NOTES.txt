@@ -1,0 +1,20 @@
+{{- if .Values.generic.ingresses }}
+  Ingresses:
+  {{- range $ingress := .Values.generic.ingresses }}
+    {{- range $host := .hosts }}
+      {{- range .paths }}
+      http{{ if $ingress.tls }}s{{ end }}://{{ $host.host }}{{ .path }}
+      {{- end }}
+    {{- end }}
+  {{- end }}
+{{- else if .Values.generic.services }}
+  Services:
+  {{- $fullName := include "laravel.fullname" . -}}
+  {{- range $service := .Values.generic.services }}
+    {{- if .fullName }}
+    {{ .fullName }}
+    {{- else }}
+    {{ $fullName }}-{{ .name | default "default" }}:{{ .port }}
+    {{- end }}
+  {{- end }}
+{{- end }}
