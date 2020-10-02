@@ -4,6 +4,9 @@ kind: Deployment
 metadata:
   name: {{ $fullName }}
   labels: {{ include "generic.labels" . | nindent 4 }}
+  {{- with .annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
