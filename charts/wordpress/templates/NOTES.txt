@@ -9,7 +9,7 @@
   {{- end }}
 {{- else if .Values.generic.services }}
   Services:
-  {{- $fullName := include "laravel.fullname" . -}}
+  {{- $fullName := include "wordpress.fullname" . -}}
   {{- range $service := .Values.generic.services }}
     {{- if .fullName }}
     {{ .fullName }}
