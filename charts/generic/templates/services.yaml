@@ -12,6 +12,9 @@ metadata:
   name: "{{ $fullName }}-{{ $serviceName | default "default" }}"
   {{- end }}
   labels: {{ $labels | nindent 4 }}
+  {{- with .annotations }}
+  annotations: {{ toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ $service.type }}
   ports:

@@ -12,6 +12,9 @@ metadata:
   {{- end }}
   labels: {{ include "generic.labels" $ | nindent 4 }}
   annotations:
+  {{- with .annotations }}
+  {{ toYaml . | indent 4 }}
+  {{- end }}
     {{- with $job.hook }}
     "helm.sh/hook": {{ . }}
     {{- end }}
