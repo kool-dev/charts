@@ -19,6 +19,26 @@ entries:
     version: 1.0.0
   laravel:
   - apiVersion: v2
+    created: "2020-10-02T18:58:56.61915749Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    description: Laravel helm chart
+    digest: 463e970178ce73ef374cf7fa293a5c7e1ad9b0cc870e62c761bdcb4b40f1377b
+    name: laravel
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/laravel-1.0.1/laravel-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     created: "2020-09-28T18:16:34.83170755Z"
     dependencies:
     - name: generic
@@ -90,6 +110,18 @@ entries:
     version: 1.0.0
   sshd:
   - apiVersion: v2
+    created: "2020-10-02T18:58:56.871580723Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    description: sshd helm chart
+    digest: 9dbf54f442345ae9239ae035fe9c7e3675467b2af5be59adf02d063b6278f895
+    name: sshd
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/sshd-1.0.1/sshd-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     created: "2020-10-02T18:36:28.601613557Z"
     dependencies:
     - name: generic
@@ -102,6 +134,26 @@ entries:
     - https://github.com/kool-dev/charts/releases/download/sshd-1.0.0/sshd-1.0.0.tgz
     version: 1.0.0
   wordpress:
+  - apiVersion: v2
+    created: "2020-10-02T18:58:57.127760756Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    description: Wordpress helm chart
+    digest: e66c6f92b9ba2fdfce1beb1c5c62b597bc345725d7e3da2693808b833df95e8b
+    name: wordpress
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/wordpress-1.0.1/wordpress-1.0.1.tgz
+    version: 1.0.1
   - apiVersion: v2
     created: "2020-09-28T18:16:35.054651064Z"
     dependencies:
