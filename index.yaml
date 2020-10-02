@@ -56,6 +56,19 @@ entries:
     urls:
     - https://github.com/kool-dev/charts/releases/download/redis-1.0.0/redis-1.0.0.tgz
     version: 1.0.0
+  sshd:
+  - apiVersion: v2
+    created: "2020-10-02T18:36:28.601613557Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.0
+    description: sshd helm chart
+    digest: c8f189284ba7b2a477e3791f0a63ec76259d63a5460d34466357763382b61932
+    name: sshd
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/sshd-1.0.0/sshd-1.0.0.tgz
+    version: 1.0.0
   wordpress:
   - apiVersion: v2
     created: "2020-09-28T18:16:35.054651064Z"
