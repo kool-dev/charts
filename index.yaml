@@ -110,6 +110,18 @@ entries:
     version: 1.0.0
   sshd:
   - apiVersion: v2
+    created: "2020-10-02T19:18:27.705164124Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    description: sshd helm chart
+    digest: 7e2eba42df4c93f63c82c4252cfec175d90a7ecb142d095439a76f74fcd12f03
+    name: sshd
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/sshd-1.0.2/sshd-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     created: "2020-10-02T18:58:56.871580723Z"
     dependencies:
     - name: generic
@@ -134,6 +146,26 @@ entries:
     - https://github.com/kool-dev/charts/releases/download/sshd-1.0.0/sshd-1.0.0.tgz
     version: 1.0.0
   wordpress:
+  - apiVersion: v2
+    created: "2020-10-02T19:18:27.797813307Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    - condition: redis.enabled
+      name: redis
+      repository: https://charts.kool.dev
+      version: 1.0.1
+    description: Wordpress helm chart
+    digest: f579e574335754159ec444eb3cc03c503d11c47556a11ab4926e617404780928
+    name: wordpress
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/wordpress-1.0.2/wordpress-1.0.2.tgz
+    version: 1.0.2
   - apiVersion: v2
     created: "2020-10-02T18:58:57.127760756Z"
     dependencies:
