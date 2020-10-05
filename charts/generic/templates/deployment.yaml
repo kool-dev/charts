@@ -150,7 +150,7 @@ spec:
             {{- else }}
             claimName: "{{ $fullName }}-{{ $volume.persistentVolumeClaim.claimName }}"
             {{- end }}
-          {{- else if $volume.persistentVolumeClaim }}
+          {{- else if $volume.secret }}
           secret:
             {{- if $volume.secret.fullSecretName }}
             secretName: {{ $volume.secret.fullSecretName }}
