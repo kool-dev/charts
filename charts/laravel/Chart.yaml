@@ -1,16 +1,16 @@
 apiVersion: v2
 name: laravel
 description: Laravel helm chart
-version: 1.2.0
+version: 1.2.1
 dependencies:
 - name: generic
-  version: 1.2.0
+  version: 1.2.1
   repository: https://charts.kool.dev
 - name: mysql
   condition: mysql.enabled
-  version: 1.2.0
+  version: 1.2.1
   repository: https://charts.kool.dev
 - name: redis
   condition: redis.enabled
-  version: 1.2.0
+  version: 1.2.1
   repository: https://charts.kool.dev
