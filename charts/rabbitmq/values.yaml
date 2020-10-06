@@ -1,0 +1,39 @@
+generic:
+  nameOverride: rabbitmq
+  # strategy:
+  #   type: Recreate
+
+  containers:
+    default:
+      image:
+        repository: rabbitmq
+        pullPolicy: Always
+        tag: 3-management-alpine
+      ports:
+        - containerPort: 5672
+      livenessProbe:
+        tcpSocket:
+          port: 5672
+      env:
+        - name: RABBITMQ_DEFAULT_USER
+          value: user
+        - name: RABBITMQ_DEFAULT_PASS
+          value: pass
+      # volumeMounts:
+      #   - name: default
+      #     mountPath: /var/lib/rabbitmq
+      #     subPath: rabbitmq
+
+  # storages:
+  #   - accessModes:
+  #       - ReadWriteOnce
+  #     size: 1Gi
+
+  # volumes:
+  #   - persistentVolumeClaim:
+  #       claimName: default
+
+  services:
+    default:
+      type: ClusterIP
+      port: 5672
