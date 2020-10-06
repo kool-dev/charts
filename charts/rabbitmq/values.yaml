@@ -11,6 +11,7 @@ generic:
         tag: 3-management-alpine
       ports:
         - containerPort: 5672
+        - containerPort: 15672
       livenessProbe:
         tcpSocket:
           port: 5672
@@ -41,3 +42,16 @@ generic:
     default:
       type: ClusterIP
       port: 5672
+
+  # ingresses:
+  #   - hosts:
+  #       - host: chart-example.local
+  #         paths:
+  #           - serviceName: default
+  #             servicePort: 15672
+  #     annotations:
+  #       kubernetes.io/ingress.class: nginx
+  #     tls:
+  #       - secretName: chart-example-tls
+  #         hosts:
+  #           - chart-example.local
