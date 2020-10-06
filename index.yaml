@@ -205,6 +205,18 @@ entries:
     version: 1.0.0
   rabbitmq:
   - apiVersion: v2
+    created: "2020-10-06T14:45:55.948582317Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    description: RabbitMQ helm chart
+    digest: f859094a8de3e606a2e8823661ca8323c2fb59f7d2ea70db87bc1ad2616029b9
+    name: rabbitmq
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/rabbitmq-1.0.1/rabbitmq-1.0.1.tgz
+    version: 1.0.1
+  - apiVersion: v2
     created: "2020-10-06T14:35:03.594136109Z"
     dependencies:
     - name: generic
