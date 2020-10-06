@@ -42,12 +42,15 @@ generic:
     default:
       type: ClusterIP
       port: 5672
+    management:
+      type: ClusterIP
+      port: 15672
 
   # ingresses:
   #   - hosts:
   #       - host: chart-example.local
   #         paths:
-  #           - serviceName: default
+  #           - serviceName: management
   #             servicePort: 15672
   #     annotations:
   #       kubernetes.io/ingress.class: nginx
