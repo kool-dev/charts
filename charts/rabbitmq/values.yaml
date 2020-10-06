@@ -14,15 +14,19 @@ generic:
       livenessProbe:
         tcpSocket:
           port: 5672
-      env:
-        - name: RABBITMQ_DEFAULT_USER
-          value: user
-        - name: RABBITMQ_DEFAULT_PASS
-          value: pass
+      envFrom:
+        - secretRef:
+            name: env
       # volumeMounts:
       #   - name: default
       #     mountPath: /var/lib/rabbitmq
       #     subPath: rabbitmq
+
+  secrets:
+    - name: env
+      data:
+        RABBITMQ_DEFAULT_USER: "user"
+        RABBITMQ_DEFAULT_PASS: "pass"
 
   # storages:
   #   - accessModes:
