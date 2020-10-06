@@ -203,6 +203,19 @@ entries:
     urls:
     - https://github.com/kool-dev/charts/releases/download/mysql-1.0.0/mysql-1.0.0.tgz
     version: 1.0.0
+  rabbitmq:
+  - apiVersion: v2
+    created: "2020-10-06T14:35:03.594136109Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    description: RabbitMQ helm chart
+    digest: 7fa290369235ccd3cda0d88808e074be8d8f66449c197e53e87e1a88d507e232
+    name: rabbitmq
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/rabbitmq-1.0.0/rabbitmq-1.0.0.tgz
+    version: 1.0.0
   redis:
   - apiVersion: v2
     created: "2020-10-05T21:13:20.539447672Z"
