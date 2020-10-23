@@ -21,3 +21,8 @@ generic:
       env:
         - name: "DOCKER_TLS_CERTDIR"
           value: ""
+
+  services:
+    default:
+      type: ClusterIP
+      port: 2375
