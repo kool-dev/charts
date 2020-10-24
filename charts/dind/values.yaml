@@ -7,7 +7,7 @@ generic:
         repository: docker
         pullPolicy: Always
         tag: dind
-      args: [ "--mtu=1450" ]
+      # args: [ "--mtu=1450" ]
       ports:
         - containerPort: 2375
       livenessProbe:
