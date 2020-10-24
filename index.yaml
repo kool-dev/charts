@@ -1,5 +1,18 @@
 apiVersion: v1
 entries:
+  dind:
+  - apiVersion: v2
+    created: "2020-10-24T15:18:43.580865601Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    description: dind helm chart
+    digest: acd3d9727bfddcded0c4795ce2dfc2844cdddcb2acd4c061c274963f8888a028
+    name: dind
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/dind-1.0.0/dind-1.0.0.tgz
+    version: 1.0.0
   generic:
   - apiVersion: v2
     created: "2020-10-05T19:23:29.692452037Z"
