@@ -1,0 +1,12 @@
+apiVersion: v2
+name: kool
+description: kool helm chart
+version: 1.0.0
+dependencies:
+- name: generic
+  version: 1.2.1
+  repository: https://charts.kool.dev
+- name: dind
+  condition: dind.enabled
+  version: 1.0.0
+  repository: https://charts.kool.dev
