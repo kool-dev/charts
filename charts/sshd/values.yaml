@@ -3,7 +3,7 @@ generic:
   nameOverride: sshd
 
   containers:
-    app:
+    default:
       image:
         repository: kooldev/sshd
         pullPolicy: Always
