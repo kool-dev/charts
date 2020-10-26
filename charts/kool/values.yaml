@@ -23,16 +23,16 @@ generic:
       #   - name: bins
       #     mountPath: "/kool"
 
-    # configMaps:
-    #   - name: bins
-    #     files:
-    #       bash_1: |
-    #         ...
-    #       bash_2: |
-    #         ...
+  # configMaps:
+  #   - name: bins
+  #     files:
+  #       bash_1: |
+  #         ...
+  #       bash_2: |
+  #         ...
 
-    # volumes:
-    #   - name: bins
-    #     configMap:
-    #       name: bins
-    #       defaultMode: 0755
+  # volumes:
+  #   - name: bins
+  #     configMap:
+  #       name: bins
+  #       defaultMode: 0755
