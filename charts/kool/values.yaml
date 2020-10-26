@@ -10,11 +10,12 @@ generic:
   nameOverride: kool
 
   containers:
-    kool:
+    default:
       image:
         repository: kooldev/kool
         pullPolicy: Always
-        tag: 1.0
+        tag: "1.6.0"
+      args: [ "tail", "-f", "/dev/null" ]
       env:
         - name: "DOCKER_HOST"
           value: "tcp://dind:2375"
@@ -22,16 +23,16 @@ generic:
       #   - name: bins
       #     mountPath: "/kool"
 
-    # configMaps:
-    #   - name: bins
-    #     files:
-    #       bash_1: |
-    #         ...
-    #       bash_2: |
-    #         ...
+  # configMaps:
+  #   - name: bins
+  #     files:
+  #       bash_1: |
+  #         ...
+  #       bash_2: |
+  #         ...
 
-    # volumes:
-    #   - name: bins
-    #     configMap:
-    #       name: bins
-    #       defaultMode: 0755
+  # volumes:
+  #   - name: bins
+  #     configMap:
+  #       name: bins
+  #       defaultMode: 0755
