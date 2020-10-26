@@ -68,6 +68,22 @@ entries:
     version: 1.0.0
   kool:
   - apiVersion: v2
+    created: "2020-10-26T16:36:42.271388053Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    - condition: dind.enabled
+      name: dind
+      repository: https://charts.kool.dev
+      version: 1.1.0
+    description: kool helm chart
+    digest: d21158ec941d28920889d4e7635e631d1ca41c019af09fdd728f24fbe3665e92
+    name: kool
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/kool-1.1.0/kool-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     created: "2020-10-24T15:19:30.481383783Z"
     dependencies:
     - name: generic
