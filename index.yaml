@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   dind:
   - apiVersion: v2
+    created: "2020-10-26T16:23:11.639210818Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    description: dind helm chart
+    digest: 8402e5adce2cede6f6eb12229b0c7ed33ca63887a0db7709a1d14b250bb62f23
+    name: dind
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/dind-1.1.0/dind-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v2
     created: "2020-10-24T15:18:43.580865601Z"
     dependencies:
     - name: generic
@@ -344,6 +356,18 @@ entries:
     - https://github.com/kool-dev/charts/releases/download/redis-1.0.0/redis-1.0.0.tgz
     version: 1.0.0
   sshd:
+  - apiVersion: v2
+    created: "2020-10-26T16:23:11.735628939Z"
+    dependencies:
+    - name: generic
+      repository: https://charts.kool.dev
+      version: 1.2.1
+    description: sshd helm chart
+    digest: 2d2676cb4e694eea49e1250b14f0874d06eb1c5e0a7a9ba7544e5734c9e5a56e
+    name: sshd
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/sshd-1.3.0/sshd-1.3.0.tgz
+    version: 1.3.0
   - apiVersion: v2
     created: "2020-10-05T21:15:59.257603183Z"
     dependencies:
