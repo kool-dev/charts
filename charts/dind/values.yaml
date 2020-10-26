@@ -2,7 +2,7 @@ generic:
   nameOverride: dind
 
   containers:
-    docker:
+    default:
       image:
         repository: docker
         pullPolicy: Always
