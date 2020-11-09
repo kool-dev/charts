@@ -95,6 +95,13 @@ spec:
                 {{- else }}
                 claimName: "{{ $fullName }}-{{ $volume.persistentVolumeClaim.claimName }}"
                 {{- end }}
+              {{- else if $volume.secret }}
+              secret:
+                {{- if $volume.secret.fullSecretName }}
+                secretName: {{ $volume.secret.fullSecretName }}
+                {{- else }}
+                secretName: "{{ $fullName }}-{{ $volume.secret.secretName }}"
+                {{- end }}
               {{- else if $volume.hostPath }}
               hostPath: {{ toYaml .hostPath | nindent 16 }}
               {{- else }}
