@@ -17,6 +17,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ $service.type }}
+  {{- if $service.externalName }}
+  externalName: {{ $service.externalName }}
+  {{- end }}
   ports:
     - port: {{ $service.port }}
       targetPort: {{ $service.targetPort | default $service.port }}
