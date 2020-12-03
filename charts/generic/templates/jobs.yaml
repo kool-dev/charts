@@ -25,6 +25,9 @@ metadata:
     "helm.sh/hook-delete-policy": {{ . }} # hook-succeeded
     {{- end }}
 spec:
+  {{- with $job.backoffLimit }}
+  backoffLimit: {{ . }}
+  {{- end }}
   template:
     metadata:
       {{- if $job.fullName }}

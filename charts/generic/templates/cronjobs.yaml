@@ -21,7 +21,12 @@ spec:
   schedule: {{ $cronjob.schedule | quote }}
   jobTemplate:
     spec:
+      {{- with $cronjob.backoffLimit }}
+      backoffLimit: {{ . }}
+      {{- end }}
       template:
+        metadata:
+          labels: {{ include "generic.labels" $ | nindent 12 }}
         spec:
           {{- with $.Values.imagePullSecrets }}
           imagePullSecrets: {{ toYaml . | nindent 12 }}
