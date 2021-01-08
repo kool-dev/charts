@@ -171,8 +171,12 @@ rollme: false
 
 serviceAccount:
   create: true
-  # annotations:
+  # annotations: {}
   name: ""
+
+  role:
+    create: false
+    rules: []
 
 # annotations: {}
 
