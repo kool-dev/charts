@@ -5,9 +5,9 @@ kind: RoleBinding
 metadata:
   name: {{ $serviceAccountName }}
 subjects:
- - kind: ServiceAccount
-   name: {{ $serviceAccountName }}
-   namespace: {{ .Release.Namespace }}
+  - kind: ServiceAccount
+    name: {{ $serviceAccountName }}
+    namespace: {{ .Release.Namespace }}
 roleRef:
    kind: Role
    name: {{ $serviceAccountName }}
