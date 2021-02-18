@@ -183,13 +183,13 @@ serviceAccount:
 # securityContext:
 #   fsGroup: 2000
 
-services:
-  default:
-    # fullName:
-    type: ClusterIP
-    ports:
-      - port: 80
-        # targetPort: 80
+# services:
+#   default:
+#     # fullName:
+#     type: ClusterIP
+#     ports:
+#       - port: 80
+#         # targetPort: 80
 
 # ingresses:
 #   - name: app
