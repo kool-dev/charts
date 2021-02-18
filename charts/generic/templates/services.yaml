@@ -21,8 +21,10 @@ spec:
   externalName: {{ $service.externalName }}
   {{- end }}
   ports:
-    - port: {{ $service.port }}
-      targetPort: {{ $service.targetPort | default $service.port }}
+    {{- range $port := $service.ports }}
+    - port: {{ $port.port }}
+      targetPort: {{ $port.targetPort | default $port.port }}
+    {{- end }}
   selector: {{ $selectorLabels | nindent 4 }}
 ---
 {{- end }}
