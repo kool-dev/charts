@@ -187,8 +187,9 @@ serviceAccount:
 #   default:
 #     # fullName:
 #     type: ClusterIP
-#     port: 80
-#     # targetPort: 80
+#     ports:
+#       - port: 80
+#         # targetPort: 80
 
 # ingresses:
 #   - name: app
