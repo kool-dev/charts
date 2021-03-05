@@ -8,5 +8,5 @@ dependencies:
   repository: https://charts.kool.dev
 - name: dind
   condition: dind.enabled
-  version: 1.1.1
+  version: 1.1.0
   repository: https://charts.kool.dev
