@@ -6,7 +6,7 @@ generic:
       image:
         repository: docker
         pullPolicy: Always
-        tag: dind
+        tag: 19-dind
       # args: [ "--mtu=1450" ]
       ports:
         - containerPort: 2375
