@@ -24,6 +24,9 @@ spec:
     {{- range $port := $service.ports }}
     - port: {{ $port.port }}
       targetPort: {{ $port.targetPort | default $port.port }}
+      {{- if $port.name }}
+      name: {{ $port.name }}
+      {{- end }}
     {{- end }}
   selector: {{ $selectorLabels | nindent 4 }}
 ---
