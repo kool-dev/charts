@@ -123,14 +123,14 @@ spec:
           {{- end }}
         {{- end }}
       {{- end }}
-      {{- with $.Values.nodeSelector }}
-      nodeSelector: {{ toYaml . | nindent 8 }}
+      {{- with $job.nodeSelector | default $.Values.nodeSelector }}
+      nodeSelector: {{ toYaml . | nindent 12 }}
       {{- end }}
-      {{- with $.Values.affinity }}
-      affinity: {{ toYaml . | nindent 8 }}
+      {{- with $job.affinity | default $.Values.affinity }}
+      affinity: {{ toYaml . | nindent 12 }}
       {{- end }}
-      {{- with $.Values.tolerations }}
-      tolerations: {{ toYaml . | nindent 8 }}
+      {{- with $job.tolerations | default $.Values.tolerations }}
+      tolerations: {{ toYaml . | nindent 12 }}
       {{- end }}
 ---
 {{- end }}

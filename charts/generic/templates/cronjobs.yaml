@@ -114,13 +114,13 @@ spec:
               {{- end }}
             {{- end }}
           {{- end }}
-          {{- with $.Values.nodeSelector }}
+          {{- with $cronjob.nodeSelector | default $.Values.nodeSelector }}
           nodeSelector: {{ toYaml . | nindent 12 }}
           {{- end }}
-          {{- with $.Values.affinity }}
+          {{- with $cronjob.affinity | default $.Values.affinity }}
           affinity: {{ toYaml . | nindent 12 }}
           {{- end }}
-          {{- with $.Values.tolerations }}
+          {{- with $cronjob.tolerations | default $.Values.tolerations }}
           tolerations: {{ toYaml . | nindent 12 }}
           {{- end }}
 ---
