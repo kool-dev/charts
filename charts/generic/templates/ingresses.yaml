@@ -32,13 +32,16 @@ spec:
         paths:
           {{- range .paths }}
           - path: {{ .path | default "/" }}
+            pathType: {{ .pathType | default "Prefix" }}
             backend:
-              {{- if .fullServiceName }}
-              serviceName: {{ .fullServiceName }}
-              {{- else }}
-              serviceName: "{{ $fullName }}-{{ .serviceName | default "default" }}"
-              {{- end }}
-              servicePort: {{ .servicePort }}
+              service:
+                {{- if .fullServiceName }}
+                name: {{ .fullServiceName }}
+                {{- else }}
+                name: "{{ $fullName }}-{{ .serviceName | default "default" }}"
+                {{- end }}
+                port:
+                  number: {{ .servicePort }}
           {{- end }}
     {{- end }}
 ---
