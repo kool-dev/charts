@@ -3,7 +3,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ $fullName }}
-  labels: {{ include "generic.labels" . | nindent 4 }}
+  labels:
+    {{ include "generic.labels" $ | indent 4 }}
+    {{- with .labels }}
+    {{ toYaml . | indent 4 }}
+    {{- end }}
   {{- with .annotations }}
   annotations: {{ toYaml . | nindent 4 }}
   {{- end }}
