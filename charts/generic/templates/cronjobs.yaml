@@ -12,7 +12,7 @@ metadata:
   {{- end }}
   labels:
     {{ include "generic.labels" $ | indent 4 }}
-    {{- with .labels }}
+    {{- with $cronjob.labels }}
     {{ toYaml . | indent 4 }}
     {{- end }}
   {{- with .annotations }}
