@@ -11,9 +11,9 @@ metadata:
   name: "{{ $fullName }}-{{ $cronjob.name | default $cronjobName }}"
   {{- end }}
   labels:
-    {{ include "generic.labels" $ | indent 4 }}
+    {{ include "generic.labels" $ | nindent 4 }}
     {{- with $cronjob.labels }}
-    {{ toYaml . | indent 4 }}
+    {{ toYaml . | nindent 4 }}
     {{- end }}
   {{- with .annotations }}
   annotations: {{ toYaml . | nindent 4 }}
