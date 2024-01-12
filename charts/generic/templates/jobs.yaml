@@ -10,10 +10,11 @@ metadata:
   {{- else }}
   name: "{{ $fullName }}-{{ $job.name | default $jobName }}"
   {{- end }}
-  labels: {{ include "generic.labels" $ | nindent 4 }}
-  {{- with $job.labels }}
-  {{ toYaml . | nindent 4 }}
-  {{- end }}
+  labels:
+    {{ include "generic.labels" $ | nindent 4 }}
+    {{- with $job.labels }}
+    {{ toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
     {{- with .annotations }}
     {{ toYaml . | indent 4 }}
