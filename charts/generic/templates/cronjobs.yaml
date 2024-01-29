@@ -2,7 +2,7 @@
 {{- $fullName := include "generic.fullname" . -}}
 {{- range $cronjobName, $cronjob := .Values.cronjobs }}
 {{- if or (not (hasKey $cronjob "enabled")) ($cronjob.enabled) }}
-apiVersion: batch/v1beta1
+apiVersion: batch/v1
 kind: CronJob
 metadata:
   {{- if $cronjob.fullName }}
