@@ -148,6 +148,7 @@ rollme: false
 
 # secrets:
 #   - name: env
+#     # type: Opaque
 #     data:
 #       SOME_ENV: "example"
 
