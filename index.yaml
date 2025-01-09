@@ -39,6 +39,14 @@ entries:
     version: 1.0.0
   generic:
   - apiVersion: v2
+    created: "2025-01-09T14:57:46.625926617Z"
+    description: Generic Chart
+    digest: bc761f6954aecd0789fefcaf0cd7860a61d9c4bccf87a90213987f33a0ad4c01
+    name: generic
+    urls:
+    - https://github.com/kool-dev/charts/releases/download/generic-1.7.1/generic-1.7.1.tgz
+    version: 1.7.1
+  - apiVersion: v2
     created: "2024-06-25T17:37:25.480491119Z"
     description: Generic Chart
     digest: 19adce93468b7f5bdbc698baa9cfaaa41c4e206bfced4bfdb66d514276ce0415
