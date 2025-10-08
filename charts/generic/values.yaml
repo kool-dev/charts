@@ -6,6 +6,7 @@ fullnameOverride: ""
 # strategy:
 #   type: Recreate
 rollme: false
+# enableServiceLinks: true
 
 # initContainers:
 #   init:
