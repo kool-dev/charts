@@ -32,6 +32,9 @@ spec:
         metadata:
           labels: {{ include "generic.labels" $ | nindent 12 }}
         spec:
+          {{- if hasKey $.Values "enableServiceLinks" }}
+          enableServiceLinks: {{ $.Values.enableServiceLinks }}
+          {{- end }}
           {{- with $.Values.imagePullSecrets }}
           imagePullSecrets: {{ toYaml . | nindent 12 }}
           {{- end }}
