@@ -178,6 +178,7 @@ serviceAccount:
 
   role:
     create: false
+    # annotations: {}
     rules: []
 
 # annotations: {}
@@ -213,6 +214,11 @@ serviceAccount:
 #   maxReplicas: 10
 #   targetCPUUtilizationPercentage: 80
 #   # targetMemoryUtilizationPercentage: 80
+
+deployment: {}
+  # nodeSelector:
+  # tolerations:
+  # affinity:
 
 # nodeSelector:
 

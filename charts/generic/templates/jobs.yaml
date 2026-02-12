@@ -23,7 +23,7 @@ metadata:
     "helm.sh/hook": {{ . }}
     {{- end }}
     {{- with $job.hookWeight }}
-    "helm.sh/hook-weight": {{ . }}
+    "helm.sh/hook-weight": {{ . | quote }}
     {{- end }}
     {{- with $job.hookDeletePolicy }}
     "helm.sh/hook-delete-policy": {{ . }} # hook-succeeded
