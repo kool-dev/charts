@@ -17,9 +17,13 @@ metadata:
   {{- end }}
 spec:
   type: {{ $service.type }}
+  {{- if $service.clusterIP }}
+  clusterIP: {{ $service.clusterIP }}
+  {{- end }}
   {{- if $service.externalName }}
   externalName: {{ $service.externalName }}
   {{- end }}
+  {{- if $service.ports }}
   ports:
     {{- range $port := $service.ports }}
     - port: {{ $port.port }}
@@ -27,8 +31,14 @@ spec:
       {{- if $port.name }}
       name: {{ $port.name }}
       {{- end }}
+      {{- if $port.protocol }}
+      protocol: {{ $port.protocol }}
+      {{- end }}
     {{- end }}
+  {{- end }}
+  {{- if ne $service.type "ExternalName" }}
   selector: {{ $selectorLabels | nindent 4 }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}

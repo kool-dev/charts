@@ -190,9 +190,12 @@ serviceAccount:
 #   default:
 #     # fullName:
 #     type: ClusterIP
+#     # clusterIP: None  # Set to "None" for headless service, or a specific IP
 #     ports:
 #       - port: 80
 #         # targetPort: 80
+#         # name: http
+#         # protocol: TCP
 
 # ingresses:
 #   - name: app
