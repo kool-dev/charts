@@ -9,6 +9,9 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
+  {{- if hasKey .Values "minReadySeconds" }}
+  minReadySeconds: {{ .Values.minReadySeconds }}
+  {{- end }}
   selector:
     matchLabels: {{ include "generic.selectorLabels" . | nindent 6 }}
   {{- with .Values.strategy }}
@@ -27,6 +30,9 @@ spec:
       {{- end }}
       labels: {{ include "generic.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if hasKey .Values "terminationGracePeriodSeconds" }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if hasKey .Values "enableServiceLinks" }}
       enableServiceLinks: {{ .Values.enableServiceLinks }}
       {{- end }}
@@ -99,6 +105,12 @@ spec:
           ports: {{ toYaml $value.ports | nindent 12 }}
           livenessProbe: {{ toYaml $value.livenessProbe | nindent 12 }}
           readinessProbe: {{ toYaml ($value.readinessProbe | default $value.livenessProbe) | nindent 12 }}
+          {{- with $value.startupProbe }}
+          startupProbe: {{ toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $value.lifecycle }}
+          lifecycle: {{ toYaml . | nindent 12 }}
+          {{- end }}
           {{- with $value.securityContext }}
           securityContext: {{ toYaml . | nindent 12 }}
           {{- end }}

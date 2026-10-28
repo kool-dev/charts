@@ -1,4 +1,7 @@
 replicaCount: 1
+# Optional Deployment/pod settings. Omit to retain Kubernetes defaults; zero is preserved.
+# minReadySeconds: 0
+# terminationGracePeriodSeconds: 90
 
 # imagePullSecrets:
 nameOverride: ""
@@ -50,6 +53,16 @@ rollme: false
 #     readinessProbe:
 #       tcpSocket:
 #         port: 80
+#     startupProbe:
+#       httpGet:
+#         path: /up
+#         port: 80
+#       periodSeconds: 2
+#       failureThreshold: 30
+#     lifecycle:
+#       preStop:
+#         exec:
+#           command: ["sh", "-c", "sleep 10"]
 #     # command: []
 #     # args: []
 #     # securityContext:

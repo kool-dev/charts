@@ -5,6 +5,7 @@
 # misc
 .DS_Store
 .env
+__pycache__/
 
 ### IntelliJ IDEA ###
 .idea
