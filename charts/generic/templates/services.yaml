@@ -17,6 +17,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ $service.type }}
+  {{- if hasKey $service "publishNotReadyAddresses" }}
+  publishNotReadyAddresses: {{ $service.publishNotReadyAddresses }}
+  {{- end }}
   {{- if $service.clusterIP }}
   clusterIP: {{ $service.clusterIP }}
   {{- end }}

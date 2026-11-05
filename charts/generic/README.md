@@ -2,6 +2,23 @@
 
 Kool generic chart, you can deploy pretty much anything using this little guy.
 
+### Peer discovery (1.9.3)
+
+`services.<name>.publishNotReadyAddresses` optionally sets the Kubernetes Service
+field of the same name. Explicit `false` is preserved; omission leaves the field
+absent, including for headless Services. Enable it only where peer discovery must
+remain available before application readiness, for example Raft clusters:
+
+```yaml
+services:
+  peers:
+    type: ClusterIP
+    clusterIP: None
+    publishNotReadyAddresses: true
+    ports:
+      - port: 8107
+```
+
 ### Deployment lifecycle (1.9.2)
 
 All settings are optional; omission preserves previous rendering and Kubernetes defaults.

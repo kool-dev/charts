@@ -26,6 +26,31 @@ def render(values):
     return [doc for doc in yaml.safe_load_all(output) if doc]
 
 
+class GenericServiceTest(unittest.TestCase):
+    def test_publish_not_ready_addresses(self):
+        for headless in (True, False):
+            for value in (True, False, None):
+                with self.subTest(headless=headless, value=value):
+                    service = {"type": "ClusterIP", "ports": [{"port": 8107}]}
+                    if headless:
+                        service["clusterIP"] = "None"
+                    if value is not None:
+                        service["publishNotReadyAddresses"] = value
+                    readiness = {"httpGet": {"path": "/health", "port": 8108}}
+                    container = dict(copy.deepcopy(CONTAINER), readinessProbe=readiness)
+                    documents = render({"services": {"peers": service},
+                                        "containers": {"default": container}})
+                    spec = next(doc["spec"] for doc in documents if doc["kind"] == "Service")
+                    if value is None:
+                        self.assertNotIn("publishNotReadyAddresses", spec)
+                    else:
+                        self.assertIs(spec["publishNotReadyAddresses"], value)
+                    self.assertEqual(spec.get("clusterIP"), "None" if headless else None)
+                    deployment = next(doc for doc in documents if doc["kind"] == "Deployment")
+                    self.assertEqual(deployment["spec"]["template"]["spec"]["containers"][0]
+                                     ["readinessProbe"], readiness)
+
+
 class GenericLifecycleTest(unittest.TestCase):
     def setUp(self):
         self.values = {"containers": {"default": copy.deepcopy(CONTAINER)}}
