@@ -188,3 +188,13 @@ spec:
       {{- with .Values.deployment.tolerations | default .Values.tolerations }}
       tolerations: {{ toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.spread }}
+      {{- if ne .mode "off" }}
+      topologySpreadConstraints:
+        - maxSkew: {{ .maxSkew | default 1 }}
+          topologyKey: {{ .topologyKey | default "kubernetes.io/hostname" | quote }}
+          whenUnsatisfiable: {{ eq .mode "required" | ternary "DoNotSchedule" "ScheduleAnyway" }}
+          labelSelector:
+            matchLabels: {{ include "generic.selectorLabels" $ | nindent 14 }}
+      {{- end }}
+      {{- end }}

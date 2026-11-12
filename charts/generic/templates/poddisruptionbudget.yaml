@@ -1,0 +1,15 @@
+{{- with .Values.disruptionBudget }}
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: {{ include "generic.fullname" $ }}
+  labels: {{ include "generic.deploymentLabels" $ | nindent 4 }}
+spec:
+  {{- if hasKey . "minAvailable" }}
+  minAvailable: {{ .minAvailable | toJson }}
+  {{- else }}
+  maxUnavailable: {{ .maxUnavailable | toJson }}
+  {{- end }}
+  selector:
+    matchLabels: {{ include "generic.selectorLabels" $ | nindent 6 }}
+{{- end }}

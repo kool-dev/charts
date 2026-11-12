@@ -1,6 +1,7 @@
 """Offline manifest tests: only helm template is invoked, never a cluster."""
 import copy
 import pathlib
+import shutil
 import subprocess
 import tempfile
 import unittest
@@ -49,6 +50,86 @@ class GenericServiceTest(unittest.TestCase):
                     deployment = next(doc for doc in documents if doc["kind"] == "Deployment")
                     self.assertEqual(deployment["spec"]["template"]["spec"]["containers"][0]
                                      ["readinessProbe"], readiness)
+
+
+class GenericSchedulingTest(unittest.TestCase):
+    def test_defaults_and_off(self):
+        for spread in (None, {"mode": "off"}):
+            values = {"containers": {"default": CONTAINER}}
+            if spread:
+                values["spread"] = spread
+            documents = render(values)
+            deployment = next(d for d in documents if d["kind"] == "Deployment")
+            self.assertNotIn("topologySpreadConstraints", deployment["spec"]["template"]["spec"])
+            self.assertFalse(any(d["kind"] == "PodDisruptionBudget" for d in documents))
+
+    def test_spread_and_budget_select_only_the_deployment(self):
+        for mode, policy in (("required", "DoNotSchedule"), ("preferred", "ScheduleAnyway")):
+            for budget in ({"minAvailable": 0}, {"minAvailable": "50%"}, {"maxUnavailable": 1}):
+                with self.subTest(mode=mode, budget=budget):
+                    documents = render({"replicaCount": 3, "spread": {"mode": mode},
+                                        "disruptionBudget": budget, "containers": {"default": CONTAINER}})
+                    deployment = next(d for d in documents if d["kind"] == "Deployment")
+                    selector = deployment["spec"]["selector"]["matchLabels"]
+                    self.assertEqual(selector, deployment["spec"]["template"]["metadata"]["labels"])
+                    spread = deployment["spec"]["template"]["spec"]["topologySpreadConstraints"][0]
+                    self.assertEqual(spread, {"maxSkew": 1, "topologyKey": "kubernetes.io/hostname",
+                                             "whenUnsatisfiable": policy, "labelSelector": {"matchLabels": selector}})
+                    pdb = next(d for d in documents if d["kind"] == "PodDisruptionBudget")
+                    self.assertEqual(pdb["apiVersion"], "policy/v1")
+                    self.assertEqual(pdb["metadata"]["name"], deployment["metadata"]["name"])
+                    self.assertEqual(pdb["spec"], dict(budget, selector={"matchLabels": selector}))
+
+    def test_aliases_are_isolated(self):
+        with tempfile.TemporaryDirectory() as directory:
+            parent = pathlib.Path(directory)
+            dependencies = []
+            for alias in ("web", "horizon"):
+                shutil.copytree(CHART, parent / "charts" / alias)
+                dependencies.append({"name": "generic", "version": "1.10.0", "alias": alias})
+            (parent / "Chart.yaml").write_text(yaml.safe_dump(
+                {"apiVersion": "v2", "name": "deploy", "version": "1.0.0", "dependencies": dependencies}))
+            (parent / "values.yaml").write_text(yaml.safe_dump({
+                alias: {"spread": {"mode": "required", "maxSkew": 2, "topologyKey": "topology.kubernetes.io/zone"},
+                        "disruptionBudget": {"minAvailable": 1}, "containers": {"default": CONTAINER},
+                        "jobs": {"hook": dict(CONTAINER, hook="post-install", restartPolicy="Never")},
+                        "cronjobs": {"cron": dict(CONTAINER, schedule="* * * * *", restartPolicy="Never")}}
+                for alias in ("web", "horizon")}))
+            documents = list(yaml.safe_load_all(subprocess.check_output(
+                ["helm", "template", "test", str(parent)], text=True)))
+        deployments = [d for d in documents if d and d["kind"] == "Deployment"]
+        self.assertEqual(len(deployments), 2)
+        selectors = [d["spec"]["selector"]["matchLabels"] for d in deployments]
+        self.assertNotEqual(*selectors)
+        budgets = [d for d in documents if d and d["kind"] == "PodDisruptionBudget"]
+        self.assertEqual(len(budgets), 2)
+        for deployment in deployments:
+            budget = next(d for d in budgets if d["metadata"]["name"] == deployment["metadata"]["name"])
+            self.assertEqual(budget["spec"]["selector"], deployment["spec"]["selector"])
+            spread = deployment["spec"]["template"]["spec"]["topologySpreadConstraints"][0]
+            self.assertEqual(spread["labelSelector"]["matchLabels"], deployment["spec"]["selector"]["matchLabels"])
+            self.assertEqual(spread["maxSkew"], 2)
+            self.assertEqual(spread["topologyKey"], "topology.kubernetes.io/zone")
+        for document in documents:
+            if not document or document["kind"] not in ("Job", "CronJob"):
+                continue
+            template = (document["spec"]["template"] if document["kind"] == "Job"
+                        else document["spec"]["jobTemplate"]["spec"]["template"])
+            self.assertNotIn("topologySpreadConstraints", template["spec"])
+            for selector in selectors:
+                self.assertFalse(all(template["metadata"]["labels"].get(k) == v for k, v in selector.items()))
+
+    def test_invalid_settings_fail(self):
+        for options in ({"spread": {"mode": "typo"}}, {"spread": {"mode": "required", "maxSkew": 0}},
+                        {"spread": {"mode": "required", "maxSkew": "1"}},
+                        {"spread": {"mode": "required", "unknown": True}},
+                        {"spread": {"mode": "required", "topologyKey": "bad key"}},
+                        {"spread": {}}, {"disruptionBudget": {}},
+                        {"disruptionBudget": {"minAvailable": 1, "maxUnavailable": 1}},
+                        {"disruptionBudget": {"minAvailable": True}},
+                        {"disruptionBudget": {"minAvailable": "101%"}}):
+            with self.subTest(options=options), self.assertRaises(subprocess.CalledProcessError):
+                render(dict(options, containers={"default": CONTAINER}))
 
 
 class GenericLifecycleTest(unittest.TestCase):

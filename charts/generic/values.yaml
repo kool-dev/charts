@@ -8,6 +8,14 @@ nameOverride: ""
 fullnameOverride: ""
 # strategy:
 #   type: Recreate
+# For a zero-unavailable rollout, use strategy.type: RollingUpdate with
+# strategy.rollingUpdate: {maxUnavailable: 0, maxSurge: 1}.
+# spread:
+#   mode: required  # off, preferred (ScheduleAnyway), required (DoNotSchedule)
+#   topologyKey: kubernetes.io/hostname
+#   maxSkew: 1
+# disruptionBudget:
+#   minAvailable: 1  # Or maxUnavailable, never both. Integer or percentage.
 rollme: false
 # enableServiceLinks: true
 

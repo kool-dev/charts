@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "definitions": {
+    "intOrPercent": {
+      "oneOf": [
+        {"type": "integer", "minimum": 0},
+        {"type": "string", "pattern": "^(100|[0-9]{1,2})%$"}
+      ]
+    }
+  },
+  "properties": {
+    "spread": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode"],
+      "properties": {
+        "mode": {"enum": ["off", "preferred", "required"]},
+        "maxSkew": {"type": "integer", "minimum": 1},
+        "topologyKey": {
+          "type": "string",
+          "maxLength": 317,
+          "pattern": "^([a-z0-9]([a-z0-9.-]*[a-z0-9])?/)?[A-Za-z0-9]([A-Za-z0-9_.-]{0,61}[A-Za-z0-9])?$"
+        }
+      }
+    },
+    "disruptionBudget": {
+      "type": "object",
+      "additionalProperties": false,
+      "oneOf": [
+        {"required": ["minAvailable"]},
+        {"required": ["maxUnavailable"]}
+      ],
+      "properties": {
+        "minAvailable": {"$ref": "#/definitions/intOrPercent"},
+        "maxUnavailable": {"$ref": "#/definitions/intOrPercent"}
+      }
+    }
+  }
+}
