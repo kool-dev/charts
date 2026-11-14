@@ -27,6 +27,61 @@ def render(values):
     return [doc for doc in yaml.safe_load_all(output) if doc]
 
 
+class GenericAPIVersionsTest(unittest.TestCase):
+    def test_ingress_uses_stable_api_and_backend_shape(self):
+        for path in ({"serviceName": "web", "servicePort": 8080},
+                     {"fullServiceName": "external-web", "servicePort": 80,
+                      "path": "/health", "pathType": "Exact"}):
+            with self.subTest(path=path):
+                documents = render({
+                    "containers": {"default": CONTAINER},
+                    "ingresses": [{
+                        "name": "web", "ingressClassName": "nginx",
+                        "hosts": [{"host": "example.test", "paths": [path]}],
+                        "tls": [{"hosts": ["example.test"], "secretName": "web-tls"}],
+                    }],
+                })
+                ingress = next(d for d in documents if d["kind"] == "Ingress")
+                self.assertEqual(ingress["apiVersion"], "networking.k8s.io/v1")
+                spec = ingress["spec"]
+                self.assertEqual(spec["ingressClassName"], "nginx")
+                self.assertEqual(spec["tls"], [{"hosts": ["example.test"], "secretName": "web-tls"}])
+                self.assertEqual(spec["rules"][0]["host"], "example.test")
+                rendered_path = spec["rules"][0]["http"]["paths"][0]
+                self.assertEqual(rendered_path["path"], path.get("path", "/"))
+                self.assertEqual(rendered_path["pathType"], path.get("pathType", "Prefix"))
+                self.assertEqual(rendered_path["backend"], {"service": {
+                    "name": path.get("fullServiceName", "test-generic-web"),
+                    "port": {"number": path["servicePort"]},
+                }})
+
+    def test_rbac_uses_stable_api_and_matching_service_account(self):
+        rules = [{"apiGroups": [""], "resources": ["pods"], "verbs": ["get", "list"]}]
+        for name in ("", "custom-account"):
+            with self.subTest(name=name):
+                documents = render({
+                    "containers": {"default": CONTAINER},
+                    "serviceAccount": {"create": True, "name": name,
+                                       "role": {"create": True, "rules": rules}},
+                })
+                account = next(d for d in documents if d["kind"] == "ServiceAccount")
+                role = next(d for d in documents if d["kind"] == "Role")
+                binding = next(d for d in documents if d["kind"] == "RoleBinding")
+                expected_name = name or "test-generic"
+                self.assertEqual(account["metadata"]["name"], expected_name)
+                for resource in (role, binding):
+                    self.assertEqual(resource["apiVersion"], "rbac.authorization.k8s.io/v1")
+                    self.assertEqual(resource["metadata"]["name"], expected_name)
+                self.assertEqual(role["rules"], rules)
+                self.assertEqual(binding["roleRef"], {
+                    "kind": "Role", "name": expected_name,
+                    "apiGroup": "rbac.authorization.k8s.io",
+                })
+                self.assertEqual(binding["subjects"], [{
+                    "kind": "ServiceAccount", "name": expected_name, "namespace": "default",
+                }])
+
+
 class GenericServiceTest(unittest.TestCase):
     def test_publish_not_ready_addresses(self):
         for headless in (True, False):
